@@ -1,38 +1,69 @@
-import fetcher from 'lib/fetcher';
+import { gql } from '@apollo/client';
+import { client } from 'lib/apollo';
 import { ALL_POST_SLUG, POST_BY_SLUG } from 'lib/wordpress/api';
-const post = ({postData}) => {
-    const blogPost = postData.data.post
-    console.log(blogPost)
+import Image from 'next/image';
+import Link from 'next/link';
+import Head from 'next/head'
+
+const post = ({ post }) => {
+
     return (
-        <div>
-            {blogPost.title}
-        </div>
+        <>
+            <Head>
+                <title>{post.title}</title>
+                <meta name="description" content={post.title} />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <div>
+                <h3>{post.title}</h3>
+                <Image
+                    src={post.featuredImage.node.sourceUrl}
+                    objectFit="cover"
+                    alt="Picture"
+                    width={500}
+                    height={300}
+                />
+                <article dangerouslySetInnerHTML={{ __html: post.content }} />
+                <Link href={'/blog'}>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width={50} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                        </svg>
+                        Back to blog
+                    </span>
+                </Link>
+            </div>
+        </>
     );
 };
 
 export default post;
 
 export const getStaticPaths = async () => {
-    const res = await fetcher(ALL_POST_SLUG)
-    const allPosts = await res.data.posts.nodes
+    const result = await client.query({
+        query: gql`${ALL_POST_SLUG}`
+    })
     return {
-        paths: allPosts.map((post) => `/post/${post.slug}`) || [],
+        paths: result.data.posts.nodes.map(({ slug }) => {
+            return {
+                params: { slug }
+            }
+        }) || [],
         fallback: false
     }
 }
 
-export const getStaticProps = async ({params}) => {
-    const variable = {
-        id: params.slug,
-        idType: "SLUG"
-    }
-    console.log(variable)
+export const getStaticProps = async ({ params }) => {
+    const { slug } = params
+    const result = await client.query({
+        query: gql`${POST_BY_SLUG}`,
+        variables: { slug }
+    })
 
-    const data = await fetcher(POST_BY_SLUG, {variable})
-    
     return {
         props: {
-            postData: data
+            post: result.data.postBy
         }
     }
 }
