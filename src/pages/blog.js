@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Head from 'next/head'
 
 import StyleBlog from '../styles/blog/blog.module.scss'
+import { Suspense } from 'react';
+import Loading from '@/components/loading';
 
 const blog = ({ allPosts }) => {
 
@@ -27,23 +29,25 @@ const blog = ({ allPosts }) => {
             </Link>
             <h1 className={StyleBlog.title}>Blog</h1>
             <main className='container'>
-                <div className={StyleBlog.listBlog}>
-                    {allPosts && allPosts.map((post) => (
-                        <div className={StyleBlog.itemPost} key={post.id}>
-                            <Image
-                                src={post.featuredImage.node.sourceUrl}
-                                alt="Picture"
-                                width={300}
-                                height={200}
-                                quality={80}
-                                loading='lazy'
-                            />
-                            <Link href={`/post/${post.slug}`}>
-                                <h3>{post.title}</h3>
-                            </Link>
-                        </div>
-                    ))}
-                </div>
+                <Suspense fallback={<Loading />}>
+                    <div className={StyleBlog.listBlog}>
+                        {allPosts && allPosts.map((post) => (
+                            <div className={StyleBlog.itemPost} key={post.id}>
+                                <Image
+                                    src={post.featuredImage.node.sourceUrl}
+                                    alt="Picture"
+                                    width={300}
+                                    height={200}
+                                    quality={80}
+                                    loading='lazy'
+                                />
+                                <Link href={`/post/${post.slug}`}>
+                                    <h3>{post.title}</h3>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                </Suspense>
             </main>
         </>
     );
