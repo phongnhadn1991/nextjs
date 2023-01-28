@@ -1,0 +1,48 @@
+.title {
+    margin: 30px 0;
+    padding: 20px;
+}
+
+.btnBack {
+    display: flex;
+    padding: 10px;
+}
+
+.listBlog {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+    padding: 20px 0 ;
+    .itemPost {
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.article {
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+.listLink {
+    display: flex;
+    flex-flow: column;
+    gap: 15px;
+    padding: 20px;
+    a {
+        font-weight: bold;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        svg {
+            width: 20px;
+        }
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

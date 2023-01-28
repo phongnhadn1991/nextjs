@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head'
 
+
+import StyleBlog from '../../styles/blog/blog.module.scss'
+
 const post = ({ post }) => {
 
     return (
@@ -15,24 +18,19 @@ const post = ({ post }) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+            <Link href={'/blog'}>
+                <span className={StyleBlog.btnBack}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width={20} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                    </svg>
+                    Back to blog
+                </span>
+            </Link>
+            <h1 className={StyleBlog.title}>{post.title}</h1>
             <div>
-                <h3>{post.title}</h3>
-                <Image
-                    src={post.featuredImage.node.sourceUrl}
-                    objectFit="cover"
-                    alt="Picture"
-                    width={500}
-                    height={300}
-                />
-                <article dangerouslySetInnerHTML={{ __html: post.content }} />
-                <Link href={'/blog'}>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width={50} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                        </svg>
-                        Back to blog
-                    </span>
-                </Link>
+                <main className='container'>
+                    <article className={StyleBlog.article} dangerouslySetInnerHTML={{ __html: post.content }} />
+                </main>
             </div>
         </>
     );
