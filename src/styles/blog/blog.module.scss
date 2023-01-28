@@ -15,7 +15,7 @@
     padding: 20px 0 ;
     .itemPost {
         img {
-            width: 100%;
+            max-width: 100%;
         }
     }
 }
@@ -43,6 +43,19 @@
         }
         &:hover {
             text-decoration: underline;
+        }
+    }
+}
+
+.listMenu {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 20px;
+    padding: 20px 0 ;
+    .itemPost {
+        text-align: center;
+        img {
+            max-width: 100%;
         }
     }
 }

@@ -1,18 +1,18 @@
+import { GET_ALL_MENU_ORDER } from 'lib/wordpress/api';
+import Head from 'next/head'
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 import { gql } from '@apollo/client';
 import { client } from 'lib/apollo';
-import { ALL_POSTS } from 'lib/wordpress/api';
-import Image from 'next/image'
-import Link from 'next/link';
-import Head from 'next/head'
+import StyleBlog from '../../styles/blog/blog.module.scss'
 
-import StyleBlog from '../styles/blog/blog.module.scss'
-
-const blog = ({ allPosts }) => {
-
+const MenuOrder = ({allMenu}) => {
+    console.log(allMenu)
     return (
-        <>
+        <div>
             <Head>
-                <title>Blog</title>
+                <title>Menu Order</title>
                 <meta name="description" content="Blog" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
@@ -25,37 +25,38 @@ const blog = ({ allPosts }) => {
                     Back to home
                 </span>
             </Link>
-            <h1 className={StyleBlog.title}>Blog</h1>
+            <h1 className={StyleBlog.title}>Menu Order</h1>
             <main className='container'>
-                <div className={StyleBlog.listBlog}>
-                    {allPosts && allPosts.map((post) => (
+                <div className={StyleBlog.listMenu}>
+                    {allMenu && allMenu.map((post) => (
                         <div className={StyleBlog.itemPost} key={post.id}>
-                            <Link href={`/post/${post.slug}`}>
+                            <Link href={`/menu/${post.slug}`}>
                                 <Image
                                     src={post.featuredImage.node.sourceUrl}
                                     alt="Picture"
-                                    width={300}
-                                    height={200}
+                                    width={100}
+                                    height={50}
                                     loading='lazy'
                                 />
 
-                                <h3>{post.title}</h3>
+                                <h5>{post.title}</h5>
                             </Link>
                         </div>
                     ))}
                 </div>
             </main>
-        </>
+        </div>
     );
 };
-export default blog
+
+export default MenuOrder;
 
 export const getStaticProps = async () => {
     const result = await client.query({
-        query: gql`${ALL_POSTS}`
+        query: gql`${GET_ALL_MENU_ORDER}`
     })
     return {
-        props: { allPosts: result.data.posts.nodes },
+        props: { allMenu: result.data.allItemMenuOrder.nodes },
         revalidate: 1
     }
 }
